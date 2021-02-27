@@ -75,7 +75,7 @@ namespace API.Controllers
         public async Task<ActionResult<ProductBrand>> GetProductTypes()
         {
             // Non- Repo pattern implementation 
-            // return Ok(await _repo.GetProductTypesAsync());
+            /// return Ok(await _repo.GetProductTypesAsync());
             // @GENERIC-REPO-PATTERN
             return Ok(await _productTypeRepo.ListAllAsync());
         }
