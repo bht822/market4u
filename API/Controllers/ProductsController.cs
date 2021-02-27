@@ -14,18 +14,38 @@ namespace API.Controllers
 
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository _repo;
-        public ProductsController(IProductRepository repo)
+
+        // // This is by using the non -repo pattern method
+        // private readonly IProductRepository _repo;
+        // public ProductsController(IProductRepository repo)
+        // {
+        //     _repo = repo;
+
+        // }
+
+        // @GENERIC-REPO-PATTERN
+        private readonly IGenericRepository<Product> _productRepo;
+        private readonly IGenericRepository<ProductBrand> _productBrandRepo;
+        private readonly IGenericRepository<ProductType> _productTypeRepo;
+
+        public ProductsController(IGenericRepository<Product> productRepo, IGenericRepository<ProductBrand> productBrandRepo, IGenericRepository<ProductType> productTypeRepo)
         {
-            _repo = repo;
+            _productTypeRepo = productTypeRepo;
+            _productBrandRepo = productBrandRepo;
+            _productRepo = productRepo;
 
         }
+
 
         [HttpGet]
 
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            return Ok(await _repo.GetProductsAsync());
+            // Non- Repo pattern implementation 
+            //return Ok(await _repo.GetProductsAsync());
+            // @GENERIC-REPO-PATTERN
+            return Ok(await _productRepo.ListAllAsync());
+
 
         }
 
@@ -33,7 +53,10 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProducts(int id)
         {
-            return Ok(await _repo.GetProductByIdAsync(id));
+            // Non- Repo pattern implementation 
+            //return Ok(await _repo.GetProductByIdAsync(id));
+            // @GENERIC-REPO-PATTERN
+            return Ok(await _productRepo.GetByIdAsync(id));
 
 
         }
@@ -42,13 +65,19 @@ namespace API.Controllers
 
         public async Task<ActionResult<ProductBrand>> GetProductBrands()
         {
-            return Ok(await _repo.GetProductBrandsAsync());
+            // Non- Repo pattern implementation 
+            //return Ok(await _repo.GetProductBrandsAsync());
+            // @GENERIC-REPO-PATTERN
+            return Ok(await _productBrandRepo.ListAllAsync());
         }
         [HttpGet("types")]
 
         public async Task<ActionResult<ProductBrand>> GetProductTypes()
         {
-            return Ok(await _repo.GetProductTypesAsync());
+            // Non- Repo pattern implementation 
+            // return Ok(await _repo.GetProductTypesAsync());
+            // @GENERIC-REPO-PATTERN
+            return Ok(await _productTypeRepo.ListAllAsync());
         }
 
 

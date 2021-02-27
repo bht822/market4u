@@ -16,7 +16,7 @@ namespace API
         public Startup(IConfiguration config)
         {
             _config = config;
-           
+
         }
 
 
@@ -24,9 +24,18 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+
+
+            // Adding the product repository , will be replaced by the Generic Repository 
             services.AddScoped<IProductRepository, ProductRepository>();
+            
+            // Adding the generic repo, the data type occurs at complie time 
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddControllers();
+
+            // Adding the Database 
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
 
