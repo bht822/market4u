@@ -1,3 +1,4 @@
+using API.Extensions;
 using API.Helpers;
 using API.MiddleWare;
 using AutoMapper;
@@ -30,11 +31,6 @@ namespace API
 
 
 
-            // Adding the product repository , will be replaced by the Generic Repository 
-            services.AddScoped<IProductRepository, ProductRepository>();
-            
-            // Adding the generic repo, the data type occurs at complie time 
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddAutoMapper(typeof(MappingProfiles));
 
@@ -43,11 +39,11 @@ namespace API
             // Adding the Database 
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
 
+            services.AddApplicationServices();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            });
+            services.AddSwagerDocumentation();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,9 +54,9 @@ namespace API
             {
                 // Using the custom error handling 
                // app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
+
             }
+            app.UserSwaggerDocumentation();
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
