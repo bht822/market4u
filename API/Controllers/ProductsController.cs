@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities;
 using Core.Interfaces;
+using Core.Specifications;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,7 @@ namespace API.Controllers
 
         // }
 
-        // @GENERIC-REPO-PATTERN
+        // @GENERIC-REPO-PATTERN, @TODO: Will be replaced with one repo soon.
         private readonly IGenericRepository<Product> _productRepo;
         private readonly IGenericRepository<ProductBrand> _productBrandRepo;
         private readonly IGenericRepository<ProductType> _productTypeRepo;
@@ -43,8 +44,17 @@ namespace API.Controllers
         {
             // Non- Repo pattern implementation 
             //return Ok(await _repo.GetProductsAsync());
-            // @GENERIC-REPO-PATTERN
-            return Ok(await _productRepo.ListAllAsync());
+
+            // @GENERIC-REPO-PATTERN,
+            //var products = (await _productRepo.ListAllAsync());
+
+            //@SPecification method implementation, not the new methd ListAsync
+            var spec = new ProductsWithTypesAndBrandsSpecification();
+
+            var products = (await _productRepo.ListAsync(spec));
+
+
+            return Ok(products);
 
 
         }
@@ -55,8 +65,16 @@ namespace API.Controllers
         {
             // Non- Repo pattern implementation 
             //return Ok(await _repo.GetProductByIdAsync(id));
+
+
             // @GENERIC-REPO-PATTERN
-            return Ok(await _productRepo.GetByIdAsync(id));
+            //return Ok(await _productRepo.GetByIdAsync(id));
+
+            //@SPecification method implementation, not the new methd GetEntityWithSpec
+
+            var spec = new ProductsWithTypesAndBrandsSpecification(id);
+
+            return Ok(await _productRepo.GetEntityWithSpec(spec));
 
 
         }
