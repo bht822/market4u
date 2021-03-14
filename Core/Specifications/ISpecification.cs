@@ -11,6 +11,8 @@ namespace Core.Specifications
 
         // Return the list of the criteria, return the object ( most generic "thing") in C#
         List<Expression<Func<T, object>>> Includes {get;}
+
+        
         
     }
 }

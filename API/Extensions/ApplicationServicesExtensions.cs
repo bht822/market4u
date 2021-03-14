@@ -14,6 +14,7 @@ namespace API.Extensions
 
             // Adding the generic repo, the data type occurs at complie time 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            
             return services;
 
         }

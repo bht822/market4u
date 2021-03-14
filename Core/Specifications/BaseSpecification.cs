@@ -6,6 +6,8 @@ namespace Core.Specifications
 {
     public class BaseSpecification<T> : ISpecification<T>
     {
+
+        // Two constructors help to have a criteria less spec or with criterion 
         public BaseSpecification()
         {
         }

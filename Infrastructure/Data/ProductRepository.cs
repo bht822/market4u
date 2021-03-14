@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
+
+    // Not used anymore @OBSELETE 
     public class ProductRepository : IProductRepository
     {
         private readonly StoreContext _context;
