@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Errors;
+using API.Helpers;
 using AutoMapper;
 using Core.Entities;
 using Core.Interfaces;
@@ -44,8 +45,7 @@ namespace API.Controllers
 
 
         [HttpGet]
-
-        public async Task<ActionResult<IReadOnlyList<ProductToReturnDto>>> GetProducts()
+        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParams productParams)
         {
             // Non- Repo pattern implementation 
             //return Ok(await _repo.GetProductsAsync());
@@ -54,9 +54,16 @@ namespace API.Controllers
             //var products = (await _productRepo.ListAllAsync());
 
             //@SPecification method implementation, not the new methd ListAsync
-            var spec = new ProductsWithTypesAndBrandsSpecification();
+            var spec = new ProductsWithTypesAndBrandsSpecification(productParams);
+
+            var countSpec = new ProductsWithFiltersWithCountSpecification(productParams);
+
+            var totalItems = await _productRepo.CountAsync(countSpec);
+
 
             var products = (await _productRepo.ListAsync(spec));
+
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
 
             // Without Auto Mapper
             // return products.Select(products => new ProductToReturnDto
@@ -72,7 +79,7 @@ namespace API.Controllers
             // }).ToList();
 
             // With Auto Mapper
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+            return Ok(new Pagination<ProductToReturnDto>(productParams.PageSize, productParams.PageSize, totalItems,data));
 
 
 
