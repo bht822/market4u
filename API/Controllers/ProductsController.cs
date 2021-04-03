@@ -79,7 +79,7 @@ namespace API.Controllers
             // }).ToList();
 
             // With Auto Mapper
-            return Ok(new Pagination<ProductToReturnDto>(productParams.PageSize, productParams.PageSize, totalItems,data));
+            return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems,data));
 
 
 
