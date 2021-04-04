@@ -6,6 +6,7 @@ using API.MiddleWare;
 using AutoMapper;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Identity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,10 @@ namespace API
 
             // Adding the Database 
             services.AddDbContext<StoreContext>(x => x.UseSqlite(_config.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppIdentityDbContext>(x =>
+            {
+                x.UseSqlite(_config.GetConnectionString("IdentityConnection"));
+            });
 
             services.AddSingleton<IConnectionMultiplexer>(c =>
             {
@@ -74,6 +79,7 @@ namespace API
 
 
             services.AddApplicationServices();
+            services.AddIdentityServices(_config);
 
 
 
@@ -113,6 +119,7 @@ namespace API
             app.UseStaticFiles();
 
             app.UseCors("CorsPolicy");
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

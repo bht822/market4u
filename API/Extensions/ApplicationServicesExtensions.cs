@@ -1,5 +1,6 @@
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace API.Extensions
@@ -8,6 +9,8 @@ namespace API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+
+            services.AddScoped<ITokenService,TokenService>();
 
             // Adding the product repository , will be replaced by the Generic Repository 
             services.AddScoped<IProductRepository, ProductRepository>();
